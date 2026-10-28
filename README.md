@@ -17,6 +17,7 @@ Everything runs in the browser; data lives in `localStorage`. No build step, no 
 - **Views** — students with their subjects, schedule and fee totals, enrolment per subject,
   and a session list with editable details.
 - **Backup** — export all data as JSON and restore it later.
+- **Installable PWA** — can be added to the phone home screen and works offline.
 
 ## Running locally
 
@@ -28,14 +29,24 @@ npm run serve        # python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
+## PWA
+
+- `locales/zh-CN.webmanifest` is the web app manifest. It lives with the locale because it
+  contains the app name; its paths are relative to the manifest (`../`).
+- `sw.js` precaches every app file and serves requests network-first, falling back to the cache
+  offline, so a deploy shows up on the next online launch without bumping the cache name.
+  When adding or removing a file, update the `ASSETS` list in `sw.js` (a test enforces this).
+- Icons are rendered from `icons/icon.svg`.
+
 ## Tests
 
 ```sh
 npm test             # node --test, requires Node 20+
 ```
 
-Tests cover the parsers, date defaults, fee splitting, backup validation and that every
-literal i18n key used in the source exists in the locale file.
+Tests cover the parsers, date defaults, fee splitting, backup validation, that every
+literal i18n key used in the source exists in the locale file, and that the service worker
+precache list matches the app files.
 
 ## Deploying to GitHub Pages
 
@@ -49,8 +60,11 @@ literal i18n key used in the source exists in the locale file.
 
 ```
 index.html          app shell and tab bar
+sw.js               service worker (offline cache)
 css/style.css       mobile-first styles (light/dark)
+icons/              app icons (icon.svg is the source)
 locales/zh-CN.json  all UI text
+locales/zh-CN.webmanifest  web app manifest
 js/app.js           entry point and hash router
 js/i18n.js          locale loading and t()
 js/store.js         data model, localStorage, backup validation
@@ -67,7 +81,7 @@ tests/              node:test unit tests
 UI text is never hard-coded: HTML uses `data-i18n` attributes and JS calls `t(key, params)`.
 Parsers and the store return error codes that views translate. To add a language, copy
 `locales/zh-CN.json` to e.g. `locales/en.json`, translate the values (including `weekdays`,
-`weekdayAliases` and `parse.headerKeywords`), and set `settings.lang` accordingly (there is no language switcher yet; edit it in an exported backup and re-import).
+`weekdayAliases` and `parse.headerKeywords`), add a matching `.webmanifest`, and set `settings.lang` accordingly (there is no language switcher yet; edit it in an exported backup and re-import).
 
 ## Data format
 

@@ -80,6 +80,7 @@ async function main() {
     return;
   }
   document.title = t('app.title');
+  document.getElementById('apple-title').content = t('app.title');
   applyI18n(document);
   window.addEventListener('hashchange', () => {
     navigatedInApp = true;
@@ -90,3 +91,8 @@ async function main() {
 }
 
 main();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .catch((err) => console.error('Service worker registration failed', err));
+}
