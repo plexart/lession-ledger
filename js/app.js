@@ -15,8 +15,11 @@ const DEFAULT_LANG = 'zh-CN';
  * to `render` as decoded params. `tab` highlights a tab, `back` shows a back button.
  */
 const routes = [
-  { pattern: /^\/register$/, tab: 'register', title: 'page.register', render: renderRegister },
   { pattern: /^\/sessions$/, tab: 'sessions', title: 'page.sessions', render: renderSessionList },
+  {
+    pattern: /^\/sessions\/new$/, tab: 'sessions', title: 'page.register', back: '/sessions',
+    render: renderRegister,
+  },
   {
     pattern: /^\/sessions\/([^/]+)$/, tab: 'sessions', title: 'page.sessionDetail', back: '/sessions',
     render: renderSessionDetail,
@@ -38,11 +41,17 @@ const backEl = document.getElementById('back-button');
 let navigatedInApp = false;
 
 function defaultPath() {
-  return store.hasRoster() ? '/register' : '/settings';
+  return store.hasRoster() ? '/sessions' : '/settings';
 }
 
 export function navigate(path) {
   location.hash = `#${path}`;
+}
+
+/** Returns to the previous in-app page, or replaces the current page with `fallback`. */
+function goBack(fallback) {
+  if (navigatedInApp) history.back();
+  else location.replace(`#${fallback}`);
 }
 
 function renderNotFound() {
@@ -58,13 +67,11 @@ function route() {
     if (match) { entry = r; break; }
   }
   const params = match ? match.slice(1).map(decodeURIComponent) : [];
-  const ctx = { params, refresh: route, navigate };
+  const ctx = { params, refresh: route, navigate, goBack };
 
   titleEl.textContent = entry ? t(entry.title) : t('page.notFound');
   backEl.hidden = !entry?.back;
-  backEl.onclick = entry?.back
-    ? () => (navigatedInApp ? history.back() : navigate(entry.back))
-    : null;
+  backEl.onclick = entry?.back ? () => goBack(entry.back) : null;
   for (const a of document.querySelectorAll('#tabbar a')) {
     a.classList.toggle('active', a.dataset.tab === entry?.tab);
   }

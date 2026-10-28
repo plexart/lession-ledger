@@ -158,7 +158,7 @@ export function renderRegister(ctx) {
     }
     store.save();
     toast(t('register.done', { count: chosen.length }));
-    ctx.navigate('/sessions');
+    ctx.goBack('/sessions');
   }
 
   const weekdays = [...offsets.keys()].sort((a, b) => offsets.get(a) - offsets.get(b));

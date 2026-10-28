@@ -59,7 +59,7 @@ function rosterCard(ctx) {
     data.subjects = subjects;
     store.save();
     toast(t('data.saved'));
-    ctx.navigate('/register');
+    ctx.navigate('/sessions/new');
   }
 
   studentsInput.addEventListener('input', updatePreview);
