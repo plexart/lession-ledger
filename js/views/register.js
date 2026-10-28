@@ -3,8 +3,7 @@ import { h, toast } from '../dom.js';
 import { store, newId } from '../store.js';
 import { lessonWeek, defaultLessonDates, addDays } from '../dates.js';
 import { shareCents } from '../fees.js';
-import { timeRangeMinutes } from '../parse.js';
-import { weekdayName, money, dateLabel } from '../format.js';
+import { weekdayName, money, dateLabel, sortSubjects, scheduleLabel } from '../format.js';
 
 const MAX_WEEKS_AHEAD = 52;
 
@@ -31,9 +30,7 @@ export function renderRegister(ctx) {
   }
 
   const { offsets } = lessonWeek(data.subjects.map((s) => s.weekday));
-  const startOf = (s) => timeRangeMinutes(s.time)?.[0] ?? 0;
-  const subjects = [...data.subjects].sort((a, b) =>
-    offsets.get(a.weekday) - offsets.get(b.weekday) || startOf(a) - startOf(b));
+  const subjects = sortSubjects(data.subjects);
   const dayDates = initialDates(subjects);
 
   const items = subjects.map((s) => ({
@@ -66,7 +63,7 @@ export function renderRegister(ctx) {
           onChange: (e) => { item.include = e.target.checked; updateCard(item); },
         }),
         item.subject),
-      h('span', { class: 'muted small' }, `${weekdayName(item.weekday)} ${item.time}`));
+      h('span', { class: 'muted small' }, scheduleLabel(item)));
 
     if (!item.include) {
       return h('section', { class: 'card disabled' }, head, h('div', { class: 'muted small' }, t('register.skipped')));

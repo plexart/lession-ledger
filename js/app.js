@@ -4,6 +4,9 @@ import { store } from './store.js';
 import { renderData } from './views/data.js';
 import { renderRegister } from './views/register.js';
 import { renderSessionList, renderSessionDetail } from './views/sessions.js';
+import { renderStudentList, renderStudentDetail } from './views/students.js';
+import { renderSubjects } from './views/subjects.js';
+import { renderFees } from './views/fees.js';
 
 const DEFAULT_LANG = 'zh-CN';
 
@@ -18,12 +21,22 @@ const routes = [
     pattern: /^\/sessions\/([^/]+)$/, tab: 'sessions', title: 'page.sessionDetail', back: '/sessions',
     render: renderSessionDetail,
   },
+  { pattern: /^\/students$/, tab: 'students', title: 'page.students', render: renderStudentList },
+  {
+    pattern: /^\/students\/([^/]+)$/, tab: 'students', title: 'page.studentDetail', back: '/students',
+    render: renderStudentDetail,
+  },
+  { pattern: /^\/subjects$/, tab: 'subjects', title: 'page.subjects', render: renderSubjects },
+  { pattern: /^\/fees$/, tab: 'fees', title: 'page.fees', render: renderFees },
   { pattern: /^\/data$/, tab: 'data', title: 'page.data', render: renderData },
 ];
 
 const viewEl = document.getElementById('view');
 const titleEl = document.getElementById('page-title');
 const backEl = document.getElementById('back-button');
+
+// True once the user has navigated inside the app, so "back" can use browser history.
+let navigatedInApp = false;
 
 function defaultPath() {
   return store.hasRoster() ? '/register' : '/data';
@@ -50,7 +63,9 @@ function route() {
 
   titleEl.textContent = entry ? t(entry.title) : t('page.notFound');
   backEl.hidden = !entry?.back;
-  backEl.onclick = entry?.back ? () => navigate(entry.back) : null;
+  backEl.onclick = entry?.back
+    ? () => (navigatedInApp ? history.back() : navigate(entry.back))
+    : null;
   for (const a of document.querySelectorAll('#tabbar a')) {
     a.classList.toggle('active', a.dataset.tab === entry?.tab);
   }
@@ -69,6 +84,7 @@ async function main() {
   document.title = t('app.title');
   applyI18n(document);
   window.addEventListener('hashchange', () => {
+    navigatedInApp = true;
     route();
     window.scrollTo(0, 0);
   });
