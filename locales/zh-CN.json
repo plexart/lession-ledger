@@ -1,0 +1,15 @@
+{
+  "app.title": "课次记账",
+
+  "nav.back": "返回",
+
+  "tab.register": "登记",
+  "tab.sessions": "课次",
+  "tab.students": "学生",
+  "tab.subjects": "科目",
+  "tab.fees": "费用",
+  "tab.data": "数据",
+
+  "page.notFound": "页面不存在",
+  "notFound.message": "找不到该页面。"
+}
