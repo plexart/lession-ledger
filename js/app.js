@@ -1,7 +1,7 @@
 import { loadLocale, applyI18n, t } from './i18n.js';
 import { h } from './dom.js';
 import { store } from './store.js';
-import { renderData } from './views/data.js';
+import { renderSettings } from './views/settings.js';
 import { renderRegister } from './views/register.js';
 import { renderSessionList, renderSessionDetail } from './views/sessions.js';
 import { renderStudentList, renderStudentDetail } from './views/students.js';
@@ -26,7 +26,7 @@ const routes = [
     render: renderStudentDetail,
   },
   { pattern: /^\/subjects$/, tab: 'subjects', title: 'page.subjects', render: renderSubjects },
-  { pattern: /^\/data$/, tab: 'data', title: 'page.data', render: renderData },
+  { pattern: /^\/settings$/, tab: 'settings', title: 'page.settings', render: renderSettings },
 ];
 
 const viewEl = document.getElementById('view');
@@ -37,7 +37,7 @@ const backEl = document.getElementById('back-button');
 let navigatedInApp = false;
 
 function defaultPath() {
-  return store.hasRoster() ? '/register' : '/data';
+  return store.hasRoster() ? '/register' : '/settings';
 }
 
 export function navigate(path) {

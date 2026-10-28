@@ -26,7 +26,7 @@ export function renderRegister(ctx) {
   if (!store.hasRoster()) {
     return h('div', { class: 'empty' },
       h('p', null, t('register.noRoster')),
-      h('a', { class: 'btn primary', href: '#/data' }, t('register.goToData')));
+      h('a', { class: 'btn primary', href: '#/settings' }, t('register.goToSettings')));
   }
 
   const { offsets } = lessonWeek(data.subjects.map((s) => s.weekday));

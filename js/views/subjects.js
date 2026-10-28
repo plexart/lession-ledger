@@ -9,7 +9,7 @@ export function renderSubjects() {
   if (!subjects.length) {
     return h('div', { class: 'empty' },
       h('p', null, t('register.noRoster')),
-      h('a', { class: 'btn primary', href: '#/data' }, t('register.goToData')));
+      h('a', { class: 'btn primary', href: '#/settings' }, t('register.goToSettings')));
   }
 
   return h('div', null, sortSubjects(subjects).map((sub) => {

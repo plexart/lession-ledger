@@ -11,7 +11,7 @@ export function renderStudentList() {
   if (!students.length) {
     return h('div', { class: 'empty' },
       h('p', null, t('register.noRoster')),
-      h('a', { class: 'btn primary', href: '#/data' }, t('register.goToData')));
+      h('a', { class: 'btn primary', href: '#/settings' }, t('register.goToSettings')));
   }
   const totals = studentTotals(store.data.sessions);
   const ordered = sortSubjects(subjects).map((s) => s.name);

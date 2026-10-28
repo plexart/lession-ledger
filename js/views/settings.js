@@ -150,6 +150,6 @@ function backupCard(ctx) {
     fileInput);
 }
 
-export function renderData(ctx) {
+export function renderSettings(ctx) {
   return h('div', null, rosterCard(ctx), settingsCard(), backupCard(ctx));
 }
