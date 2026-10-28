@@ -15,11 +15,22 @@ export function h(tag, props, ...children) {
     } else if (key in el) el[key] = value;
     else el.setAttribute(key, value === true ? '' : value);
   }
+  appendChildren(el, children);
+  return el;
+}
+
+/** Appends children, skipping null/false and flattening arrays. */
+function appendChildren(el, children) {
   for (const child of children.flat(Infinity)) {
     if (child == null || child === false) continue;
     el.append(child instanceof Node ? child : String(child));
   }
-  return el;
+}
+
+/** Like el.replaceChildren(), but skips null/false (which the DOM would render as text). */
+export function setChildren(el, ...children) {
+  el.replaceChildren();
+  appendChildren(el, children);
 }
 
 let toastTimer = 0;

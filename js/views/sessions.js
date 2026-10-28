@@ -1,5 +1,5 @@
 import { t } from '../i18n.js';
-import { h, toast } from '../dom.js';
+import { h, setChildren, toast } from '../dom.js';
 import { store, compareSessions } from '../store.js';
 import { shareCents, totalCents } from '../fees.js';
 import { money, dateLabel } from '../format.js';
@@ -84,7 +84,7 @@ export function renderSessionDetail(ctx) {
     const attendees = draft.names.filter((n) => draft.present.has(n));
     const share = shareCents({ fee: draft.fee, attendees });
 
-    root.replaceChildren(
+    setChildren(root,
       h('section', { class: 'card' },
         h('div', { class: 'card-head' },
           h('h2', null, session.subject),

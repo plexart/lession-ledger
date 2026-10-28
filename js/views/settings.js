@@ -1,5 +1,5 @@
 import { t, raw } from '../i18n.js';
-import { h, toast } from '../dom.js';
+import { h, setChildren, toast } from '../dom.js';
 import { store, parseDataJSON, emptyData, DataError } from '../store.js';
 import { toISODate } from '../dates.js';
 import {
@@ -37,7 +37,7 @@ function rosterCard(ctx) {
 
   function updatePreview() {
     const { students, subjects, errors, warnings } = parseAll();
-    preview.replaceChildren(
+    setChildren(preview,
       h('div', { class: 'muted' }, t('data.previewSummary', { students: students.length, subjects: subjects.length })),
       errors.length || warnings.length
         ? h('ul', { class: 'messages' },
