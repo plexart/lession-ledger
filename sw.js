@@ -21,6 +21,7 @@ const ASSETS = [
   'js/fees.js',
   'js/format.js',
   'js/i18n.js',
+  'js/install.js',
   'js/parse.js',
   'js/store.js',
   'js/views/register.js',

@@ -3,6 +3,9 @@ import { h, setChildren, toast } from '../dom.js';
 import { store, parseDataJSON, emptyData, DataError } from '../store.js';
 import { toISODate } from '../dates.js';
 import {
+  isStandalone, isIOS, canPromptInstall, promptInstall, onInstallChange,
+} from '../install.js';
+import {
   parseStudents, parseSchedule, checkRoster, formatStudents, formatSchedule,
 } from '../parse.js';
 import { weekdayLookup, headerKeywords, issueText } from '../format.js';
@@ -150,6 +153,31 @@ function backupCard(ctx) {
     fileInput);
 }
 
+function installCard() {
+  if (isStandalone()) return null;
+  const card = h('section', { class: 'card' });
+
+  function render() {
+    setChildren(card,
+      h('h2', null, t('install.title')),
+      h('p', { class: 'muted small' }, t(isIOS() ? 'install.iosHint' : 'install.hint')),
+      canPromptInstall()
+        ? h('div', { class: 'actions' }, h('button', {
+          type: 'button',
+          class: 'btn primary',
+          onClick: async () => {
+            if (await promptInstall()) toast(t('install.done'));
+            render();
+          },
+        }, t('install.button')))
+        : null);
+  }
+
+  onInstallChange(render);
+  render();
+  return card;
+}
+
 export function renderSettings(ctx) {
-  return h('div', null, rosterCard(ctx), settingsCard(), backupCard(ctx));
+  return h('div', null, rosterCard(ctx), settingsCard(), backupCard(ctx), installCard());
 }

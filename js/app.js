@@ -1,6 +1,7 @@
 import { loadLocale, applyI18n, t } from './i18n.js';
 import { h } from './dom.js';
 import { store } from './store.js';
+import './install.js';
 import { renderSettings } from './views/settings.js';
 import { renderRegister } from './views/register.js';
 import { renderSessionList, renderSessionDetail } from './views/sessions.js';

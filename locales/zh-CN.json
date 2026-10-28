@@ -130,5 +130,10 @@
   "backup.cleared": "已清空",
   "backup.error.invalidJson": "文件不是有效的 JSON",
   "backup.error.invalidFormat": "文件格式不正确",
-  "backup.error.unsupportedVersion": "不支持的备份版本"
+  "backup.error.unsupportedVersion": "不支持的备份版本",
+  "install.title": "添加到手机桌面",
+  "install.hint": "添加后可以像普通应用一样从桌面打开，没有网络时也能使用。在浏览器菜单中选择「添加到主屏幕」或「安装应用」。",
+  "install.iosHint": "添加后可以像普通应用一样从桌面打开，没有网络时也能使用。请用 Safari 打开本页，点击底部的分享按钮，再选择「添加到主屏幕」。注意：桌面应用和 Safari 的数据不互通，如果已经在 Safari 里录入了数据，请先在这里导出备份，再到桌面应用里导入。",
+  "install.button": "安装到桌面",
+  "install.done": "已添加到桌面"
 }
