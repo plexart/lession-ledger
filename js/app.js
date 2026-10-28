@@ -6,7 +6,6 @@ import { renderRegister } from './views/register.js';
 import { renderSessionList, renderSessionDetail } from './views/sessions.js';
 import { renderStudentList, renderStudentDetail } from './views/students.js';
 import { renderSubjects } from './views/subjects.js';
-import { renderFees } from './views/fees.js';
 
 const DEFAULT_LANG = 'zh-CN';
 
@@ -27,7 +26,6 @@ const routes = [
     render: renderStudentDetail,
   },
   { pattern: /^\/subjects$/, tab: 'subjects', title: 'page.subjects', render: renderSubjects },
-  { pattern: /^\/fees$/, tab: 'fees', title: 'page.fees', render: renderFees },
   { pattern: /^\/data$/, tab: 'data', title: 'page.data', render: renderData },
 ];
 

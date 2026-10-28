@@ -14,8 +14,8 @@ Everything runs in the browser; data lives in `localStorage`. No build step, no 
   mark leave.
 - **Fees** — each lesson (default 1500, configurable) is split evenly among the students who
   actually attended.
-- **Views** — students with their subjects and schedule, enrolment per subject, a session list
-  with editable details, and per-student fee totals with an optional date range.
+- **Views** — students with their subjects, schedule and fee totals, enrolment per subject,
+  and a session list with editable details.
 - **Backup** — export all data as JSON and restore it later.
 
 ## Running locally
