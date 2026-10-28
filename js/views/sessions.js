@@ -1,7 +1,7 @@
 import { t } from '../i18n.js';
 import { h, toast } from '../dom.js';
 import { store, compareSessions } from '../store.js';
-import { shareCents } from '../fees.js';
+import { shareCents, totalCents } from '../fees.js';
 import { money, dateLabel } from '../format.js';
 
 /** Sorts names by roster order; names no longer on the roster go last. */
@@ -19,7 +19,7 @@ export function renderSessionList() {
       h('a', { class: 'btn primary', href: '#/register' }, t('sessions.goRegister')));
   }
 
-  const total = sessions.reduce((sum, s) => sum + (s.attendees.length ? Math.round(s.fee * 100) : 0), 0);
+  const total = totalCents(sessions);
   const byDate = new Map();
   for (const s of sessions) {
     if (!byDate.has(s.date)) byDate.set(s.date, []);

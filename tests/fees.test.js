@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { shareCents, studentTotals, formatAmount } from '../js/fees.js';
+import { shareCents, studentTotals, totalCents, formatAmount } from '../js/fees.js';
 
 const session = (date, attendees, absentees = [], fee = 1500) => ({ date, fee, attendees, absentees });
 
@@ -21,6 +21,10 @@ test('studentTotals sums shares and counts leave within a date range', () => {
   assert.deepEqual(all.get('c'), { cents: 75000, attended: 1, leave: 1 });
   const oct = studentTotals(sessions, { to: '2026-10-31' });
   assert.equal(oct.get('a').cents, 150000);
+});
+
+test('totalCents skips sessions nobody attended', () => {
+  assert.equal(totalCents([session('2026-10-30', ['a']), session('2026-10-31', [], ['a']), session('2026-11-06', ['b'], [], 1000)]), 250000);
 });
 
 test('formatAmount', () => {

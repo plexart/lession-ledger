@@ -6,6 +6,11 @@ export function shareCents(session) {
   return n ? Math.round((Number(session.fee) * 100) / n) : 0;
 }
 
+/** Total charged for sessions in cents; sessions nobody attended are not charged. */
+export function totalCents(sessions) {
+  return sessions.reduce((sum, s) => sum + (s.attendees.length ? Math.round(Number(s.fee) * 100) : 0), 0);
+}
+
 export function inRange(date, from, to) {
   return (!from || date >= from) && (!to || date <= to);
 }
