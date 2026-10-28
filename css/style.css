@@ -78,6 +78,10 @@ a { color: var(--primary); text-decoration: none; }
   margin-left: auto;
   margin-right: -8px;
   padding: 6px 8px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
   color: var(--primary);
   font-size: 16px;
   font-weight: 600;
@@ -299,12 +303,6 @@ textarea {
 }
 .actions .btn { flex: 1; }
 
-.sticky-actions {
-  position: sticky;
-  bottom: calc(var(--tabbar-h) + 8px + env(safe-area-inset-bottom));
-  padding: 8px 0 0;
-}
-.sticky-actions .btn { box-shadow: 0 4px 16px rgba(0, 0, 0, .15); }
 
 .messages { margin: 8px 0 0; padding-left: 18px; font-size: 13px; }
 .messages .error { color: var(--danger); }

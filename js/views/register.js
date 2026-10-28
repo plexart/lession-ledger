@@ -184,9 +184,6 @@ export function renderRegister(ctx) {
     return el;
   });
 
-  return h('div', null,
-    datesCard,
-    cardEls,
-    h('div', { class: 'sticky-actions' },
-      h('button', { type: 'button', class: 'btn primary block', onClick: submit }, t('register.submit'))));
+  ctx.setAction('register.submit', submit);
+  return h('div', null, datesCard, cardEls);
 }

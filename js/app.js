@@ -13,12 +13,13 @@ const DEFAULT_LANG = 'zh-CN';
 /**
  * Route table. `pattern` is matched against the hash path; capture groups are passed
  * to `render` as decoded params. `tab` highlights a tab, `back` shows a back button,
- * `action` adds a link ({label, href}) on the right of the top bar.
+ * `action` ({label, path}) adds a link on the right of the top bar; views can also set one
+ * at render time with ctx.setAction(label, onClick).
  */
 const routes = [
   {
     pattern: /^\/sessions$/, tab: 'sessions', title: 'page.sessions', render: renderSessionList,
-    action: { label: 'sessions.register', href: '#/sessions/new' },
+    action: { label: 'sessions.register', path: '/sessions/new' },
   },
   {
     pattern: /^\/sessions\/new$/, tab: 'sessions', title: 'page.register', back: '/sessions',
@@ -59,6 +60,13 @@ function goBack(fallback) {
   else location.replace(`#${fallback}`);
 }
 
+/** Shows a button with the given label key on the right of the top bar, or hides it. */
+function setAction(label, onClick) {
+  actionEl.hidden = !label;
+  actionEl.textContent = label ? t(label) : '';
+  actionEl.onclick = label ? onClick : null;
+}
+
 function renderNotFound() {
   return h('div', { class: 'empty' }, t('notFound.message'));
 }
@@ -72,16 +80,13 @@ function route() {
     if (match) { entry = r; break; }
   }
   const params = match ? match.slice(1).map(decodeURIComponent) : [];
-  const ctx = { params, refresh: route, navigate, goBack };
+  const ctx = { params, refresh: route, navigate, goBack, setAction };
 
   titleEl.textContent = entry ? t(entry.title) : t('page.notFound');
   backEl.hidden = !entry?.back;
   backEl.onclick = entry?.back ? () => goBack(entry.back) : null;
-  actionEl.hidden = !entry?.action;
-  if (entry?.action) {
-    actionEl.textContent = t(entry.action.label);
-    actionEl.href = entry.action.href;
-  }
+  const { action } = entry ?? {};
+  setAction(action?.label, action && (() => navigate(action.path)));
   for (const a of document.querySelectorAll('#tabbar a')) {
     a.classList.toggle('active', a.dataset.tab === entry?.tab);
   }
