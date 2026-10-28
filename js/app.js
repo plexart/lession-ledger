@@ -2,6 +2,7 @@ import { loadLocale, applyI18n, t } from './i18n.js';
 import { h } from './dom.js';
 import { store } from './store.js';
 import { renderData } from './views/data.js';
+import { renderRegister } from './views/register.js';
 
 const DEFAULT_LANG = 'zh-CN';
 
@@ -10,6 +11,7 @@ const DEFAULT_LANG = 'zh-CN';
  * to `render` as decoded params. `tab` highlights a tab, `back` shows a back button.
  */
 const routes = [
+  { pattern: /^\/register$/, tab: 'register', title: 'page.register', render: renderRegister },
   { pattern: /^\/data$/, tab: 'data', title: 'page.data', render: renderData },
 ];
 
