@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Full-bleed background; the glyph stays inside the maskable safe zone (radius 205). -->
+  <defs>
+    <clipPath id="book"><rect x="150" y="116" width="212" height="280" rx="28"/></clipPath>
+  </defs>
+  <rect width="512" height="512" fill="#2563eb"/>
+  <g clip-path="url(#book)">
+    <rect x="150" y="116" width="212" height="280" fill="#ffffff"/>
+    <rect x="150" y="116" width="36" height="280" fill="#c7d7fe"/>
+  </g>
+  <g stroke="#2563eb" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M216 184h110M216 232h110" stroke-width="20"/>
+    <path d="M218 308l34 34 72-76" stroke-width="26"/>
+  </g>
+</svg>
