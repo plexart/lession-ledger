@@ -41,7 +41,7 @@ const backEl = document.getElementById('back-button');
 let navigatedInApp = false;
 
 function defaultPath() {
-  return store.hasRoster() ? '/sessions' : '/settings';
+  return store.hasRoster() ? '/subjects' : '/settings';
 }
 
 export function navigate(path) {
