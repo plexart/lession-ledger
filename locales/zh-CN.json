@@ -130,5 +130,17 @@
   "fees.leave": "请假",
   "fees.amount": "费用",
   "fees.total": "合计",
-  "fees.roundingNote": "人均费用四舍五入到分，合计可能与课次总费用相差几分钱。"
+  "fees.roundingNote": "人均费用四舍五入到分，合计可能与课次总费用相差几分钱。",
+  "backup.title": "备份与恢复",
+  "backup.hint": "数据只保存在本浏览器中（{students} 名学生、{subjects} 个科目、{sessions} 个课次）。换手机或清理浏览器前请先导出备份。",
+  "backup.export": "导出 JSON",
+  "backup.import": "导入 JSON",
+  "backup.clear": "清空所有数据",
+  "backup.confirmImport": "备份包含 {students} 名学生、{subjects} 个科目、{sessions} 个课次。导入将覆盖当前所有数据，继续？",
+  "backup.imported": "已导入",
+  "backup.confirmClear": "确定清空所有数据？此操作无法撤销，建议先导出备份。",
+  "backup.cleared": "已清空",
+  "backup.error.invalidJson": "文件不是有效的 JSON",
+  "backup.error.invalidFormat": "文件格式不正确",
+  "backup.error.unsupportedVersion": "不支持的备份版本"
 }

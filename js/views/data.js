@@ -1,6 +1,7 @@
 import { t, raw } from '../i18n.js';
 import { h, toast } from '../dom.js';
-import { store } from '../store.js';
+import { store, parseDataJSON, emptyData, DataError } from '../store.js';
+import { toISODate } from '../dates.js';
 import {
   parseStudents, parseSchedule, checkRoster, formatStudents, formatSchedule,
 } from '../parse.js';
@@ -92,6 +93,63 @@ function settingsCard() {
   );
 }
 
+function exportData() {
+  const blob = new Blob([JSON.stringify(store.data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = h('a', { href: url, download: `lesson-ledger-${toISODate(new Date())}.json` });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function backupCard(ctx) {
+  const { data } = store;
+  const fileInput = h('input', { type: 'file', accept: 'application/json,.json', hidden: true });
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    fileInput.value = '';
+    if (!file) return;
+    let imported;
+    try {
+      imported = parseDataJSON(await file.text());
+    } catch (err) {
+      if (!(err instanceof DataError)) console.error(err);
+      return toast(t(`backup.error.${err instanceof DataError ? err.code : 'invalidFormat'}`));
+    }
+    const message = t('backup.confirmImport', {
+      students: imported.students.length,
+      subjects: imported.subjects.length,
+      sessions: imported.sessions.length,
+    });
+    if (!confirm(message)) return;
+    store.replace(imported);
+    toast(t('backup.imported'));
+    ctx.refresh();
+  });
+
+  function clearAll() {
+    if (!confirm(t('backup.confirmClear'))) return;
+    store.replace(emptyData());
+    toast(t('backup.cleared'));
+    ctx.refresh();
+  }
+
+  return h('section', { class: 'card' },
+    h('h2', null, t('backup.title')),
+    h('p', { class: 'muted small' }, t('backup.hint', {
+      students: data.students.length,
+      subjects: data.subjects.length,
+      sessions: data.sessions.length,
+    })),
+    h('div', { class: 'actions' },
+      h('button', { type: 'button', class: 'btn primary', onClick: exportData }, t('backup.export')),
+      h('button', { type: 'button', class: 'btn', onClick: () => fileInput.click() }, t('backup.import'))),
+    h('div', { class: 'actions' },
+      h('button', { type: 'button', class: 'btn danger', onClick: clearAll }, t('backup.clear'))),
+    fileInput);
+}
+
 export function renderData(ctx) {
-  return h('div', null, rosterCard(ctx), settingsCard());
+  return h('div', null, rosterCard(ctx), settingsCard(), backupCard(ctx));
 }

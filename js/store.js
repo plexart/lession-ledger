@@ -87,6 +87,9 @@ export function compareSessions(a, b) {
   return (a.time ?? '').localeCompare(b.time ?? '', undefined, { numeric: true });
 }
 
+// Node (tests) may expose a non-functional localStorage stub.
+const hasStorage = typeof globalThis.localStorage?.getItem === 'function';
+
 function readStorage() {
   try {
     const text = localStorage.getItem(STORAGE_KEY);
@@ -99,7 +102,7 @@ function readStorage() {
 
 /** Global store. Mutate `store.data` then call `store.save()`. */
 export const store = {
-  data: typeof localStorage === 'undefined' ? emptyData() : readStorage(),
+  data: hasStorage ? readStorage() : emptyData(),
 
   save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
