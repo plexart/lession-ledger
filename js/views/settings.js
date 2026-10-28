@@ -89,10 +89,21 @@ function settingsCard() {
     store.save();
     toast(t('data.saved'));
   });
+  const showFeesInput = h('input', {
+    type: 'checkbox',
+    checked: settings.showFees,
+    onChange: (e) => {
+      settings.showFees = e.target.checked;
+      store.save();
+      toast(t('data.saved'));
+    },
+  });
   return h('section', { class: 'card' },
     h('h2', null, t('data.settingsTitle')),
     h('label', { class: 'field' }, h('span', null, t('data.defaultFee')), feeInput),
     h('p', { class: 'muted small' }, t('data.defaultFeeHint')),
+    h('label', { class: 'check' }, showFeesInput, t('data.showFees')),
+    h('p', { class: 'muted small' }, t('data.showFeesHint')),
   );
 }
 

@@ -13,6 +13,7 @@ export function renderStudentList() {
       h('p', null, t('register.noRoster')),
       h('a', { class: 'btn primary', href: '#/settings' }, t('register.goToSettings')));
   }
+  const { showFees } = store.data.settings;
   const totals = studentTotals(store.data.sessions);
   const ordered = sortSubjects(subjects).map((s) => s.name);
   const subjectOrder = (a, b) => ordered.indexOf(a) - ordered.indexOf(b);
@@ -27,9 +28,17 @@ export function renderStudentList() {
           return h('div', { class: 'sub' }, sub ? `${name} · ${scheduleLabel(sub)}` : name);
         })),
       h('div', { class: 'side' },
-        h('div', { class: 'amount' }, money(total?.cents ?? 0)),
+        showFees ? h('div', { class: 'amount' }, money(total?.cents ?? 0)) : null,
         h('div', { class: 'sub' }, t('student.attendedCount', { count: total?.attended ?? 0 }))));
   }));
+}
+
+/** Per-session status in a student's history: the share paid, or present/leave. */
+function attendanceBadge(session, attended, showFees) {
+  if (!attended) return h('span', { class: 'chip leave' }, t('student.leave'));
+  return showFees
+    ? h('span', { class: 'amount' }, money(shareCents(session)))
+    : h('span', { class: 'chip present' }, t('student.present'));
 }
 
 export function renderStudentDetail(ctx) {
@@ -40,6 +49,7 @@ export function renderStudentDetail(ctx) {
     .sort(compareSessions);
   if (!student && !history.length) return h('div', { class: 'empty' }, t('student.notFound'));
 
+  const { showFees } = store.data.settings;
   const total = studentTotals(history).get(name) ?? { cents: 0, attended: 0, leave: 0 };
   const subjects = sortSubjects(store.data.subjects.filter((s) => student?.subjects.includes(s.name)));
   const unknown = student ? student.subjects.filter((n) => !store.subject(n)) : [];
@@ -58,8 +68,7 @@ export function renderStudentDetail(ctx) {
         : h('p', { class: 'muted small' }, t('student.notInRoster')),
       h('p', null,
         t('student.stats', { attended: total.attended, leave: total.leave }),
-        ' · ',
-        h('span', { class: 'amount' }, t('student.total', { total: money(total.cents) })))),
+        showFees ? [' · ', h('span', { class: 'amount' }, t('student.total', { total: money(total.cents) }))] : null)),
     h('div', { class: 'section-title' }, t('student.history')),
     history.length
       ? h('div', { class: 'list' }, history.map((s) => {
@@ -68,9 +77,7 @@ export function renderStudentDetail(ctx) {
           h('div', { class: 'main' },
             h('div', { class: 'title' }, s.subject),
             h('div', { class: 'sub' }, [dateLabel(s.date), s.time].filter(Boolean).join(' · '))),
-          h('div', { class: 'side' }, attended
-            ? h('span', { class: 'amount' }, money(shareCents(s)))
-            : h('span', { class: 'chip leave' }, t('student.leave'))));
+          h('div', { class: 'side' }, attendanceBadge(s, attended, showFees)));
       }))
       : h('div', { class: 'empty' }, t('student.noHistory')));
 }

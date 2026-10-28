@@ -20,7 +20,9 @@ export function renderSubjects() {
       h('div', { class: 'card-head' },
         h('h2', null, sub.name),
         h('span', { class: 'muted small' }, scheduleLabel(sub))),
-      h('p', { class: 'muted small' }, t('subject.stats', { students: names.length, sessions: held.length, total: money(total) })),
+      h('p', { class: 'muted small' },
+        t('subject.stats', { students: names.length, sessions: held.length }),
+        store.data.settings.showFees ? [' · ', t('subject.total', { total: money(total) })] : null),
       names.length
         ? h('div', { class: 'chips' }, names.map((n) =>
           h('a', { class: 'chip info', href: `#/students/${encodeURIComponent(n)}` }, n)))

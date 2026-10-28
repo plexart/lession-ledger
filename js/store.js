@@ -7,7 +7,7 @@ export const DEFAULT_FEE = 1500;
 export function emptyData() {
   return {
     version: DATA_VERSION,
-    settings: { defaultFee: DEFAULT_FEE, lang: 'zh-CN' },
+    settings: { defaultFee: DEFAULT_FEE, showFees: true, lang: 'zh-CN' },
     students: [],
     subjects: [],
     sessions: [],
