@@ -13,9 +13,8 @@ function rosterOrder(names) {
 
 export function renderSessionList() {
   const sessions = [...store.data.sessions].sort(compareSessions);
-  const registerButton = h('a', { class: 'btn primary block', href: '#/sessions/new' }, t('sessions.register'));
   if (!sessions.length) {
-    return h('div', null, registerButton, h('div', { class: 'empty' }, t('sessions.empty')));
+    return h('div', { class: 'empty' }, t('sessions.empty'));
   }
 
   const total = totalCents(sessions);
@@ -26,7 +25,6 @@ export function renderSessionList() {
   }
 
   return h('div', null,
-    registerButton,
     h('p', { class: 'muted small' }, t('sessions.summary', { count: sessions.length, total: money(total) })),
     [...byDate].map(([date, list]) => [
       h('div', { class: 'section-title' }, dateLabel(date)),

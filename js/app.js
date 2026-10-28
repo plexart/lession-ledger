@@ -12,10 +12,14 @@ const DEFAULT_LANG = 'zh-CN';
 
 /**
  * Route table. `pattern` is matched against the hash path; capture groups are passed
- * to `render` as decoded params. `tab` highlights a tab, `back` shows a back button.
+ * to `render` as decoded params. `tab` highlights a tab, `back` shows a back button,
+ * `action` adds a link ({label, href}) on the right of the top bar.
  */
 const routes = [
-  { pattern: /^\/sessions$/, tab: 'sessions', title: 'page.sessions', render: renderSessionList },
+  {
+    pattern: /^\/sessions$/, tab: 'sessions', title: 'page.sessions', render: renderSessionList,
+    action: { label: 'sessions.register', href: '#/sessions/new' },
+  },
   {
     pattern: /^\/sessions\/new$/, tab: 'sessions', title: 'page.register', back: '/sessions',
     render: renderRegister,
@@ -36,6 +40,7 @@ const routes = [
 const viewEl = document.getElementById('view');
 const titleEl = document.getElementById('page-title');
 const backEl = document.getElementById('back-button');
+const actionEl = document.getElementById('page-action');
 
 // True once the user has navigated inside the app, so "back" can use browser history.
 let navigatedInApp = false;
@@ -72,6 +77,11 @@ function route() {
   titleEl.textContent = entry ? t(entry.title) : t('page.notFound');
   backEl.hidden = !entry?.back;
   backEl.onclick = entry?.back ? () => goBack(entry.back) : null;
+  actionEl.hidden = !entry?.action;
+  if (entry?.action) {
+    actionEl.textContent = t(entry.action.label);
+    actionEl.href = entry.action.href;
+  }
   for (const a of document.querySelectorAll('#tabbar a')) {
     a.classList.toggle('active', a.dataset.tab === entry?.tab);
   }
