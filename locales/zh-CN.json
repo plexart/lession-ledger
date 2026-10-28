@@ -138,5 +138,6 @@
   "subject.total": "总费用 {total}",
   "student.present": "出勤",
   "data.showFees": "显示费用",
-  "data.showFeesHint": "关闭后，「科目」和「学生」页面不显示费用；「课次」页面和登记时仍会显示。"
+  "data.showFeesHint": "关闭后，「科目」和「学生」页面不显示费用；「课次」页面和登记时仍会显示。",
+  "settings.version": "版本 {version}"
 }

@@ -37,6 +37,8 @@ npm run serve        # python3 -m http.server 8000
   offline, so a deploy shows up on the next online launch without bumping the cache name.
   When adding or removing a file, update the `ASSETS` list in `sw.js` (a test enforces this).
 - Icons are rendered from `icons/icon.svg`.
+- `js/version.js` holds the version shown at the bottom of the settings page. Bump it with
+  every release so users can confirm an installed app has updated.
 
 ## Tests
 

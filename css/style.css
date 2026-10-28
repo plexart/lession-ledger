@@ -178,6 +178,12 @@ a.list-item:active { background: var(--primary-soft); }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
 .amount { font-variant-numeric: tabular-nums; font-weight: 600; }
+.version {
+  margin: 16px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
 .empty {
   padding: 32px 16px;
   text-align: center;

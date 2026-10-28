@@ -29,6 +29,7 @@ const ASSETS = [
   'js/views/settings.js',
   'js/views/students.js',
   'js/views/subjects.js',
+  'js/version.js',
 ];
 
 self.addEventListener('install', (event) => {

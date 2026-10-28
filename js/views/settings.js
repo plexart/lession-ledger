@@ -2,6 +2,7 @@ import { t, raw } from '../i18n.js';
 import { h, setChildren, toast } from '../dom.js';
 import { store, parseDataJSON, emptyData, DataError } from '../store.js';
 import { toISODate } from '../dates.js';
+import { APP_VERSION } from '../version.js';
 import {
   isStandalone, isIOS, canPromptInstall, promptInstall, onInstallChange,
 } from '../install.js';
@@ -190,5 +191,7 @@ function installCard() {
 }
 
 export function renderSettings(ctx) {
-  return h('div', null, rosterCard(ctx), settingsCard(), backupCard(ctx), installCard());
+  return h('div', null,
+    rosterCard(ctx), settingsCard(), backupCard(ctx), installCard(),
+    h('p', { class: 'version' }, t('settings.version', { version: APP_VERSION })));
 }
