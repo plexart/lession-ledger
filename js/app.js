@@ -3,6 +3,7 @@ import { h } from './dom.js';
 import { store } from './store.js';
 import { renderData } from './views/data.js';
 import { renderRegister } from './views/register.js';
+import { renderSessionList, renderSessionDetail } from './views/sessions.js';
 
 const DEFAULT_LANG = 'zh-CN';
 
@@ -12,6 +13,11 @@ const DEFAULT_LANG = 'zh-CN';
  */
 const routes = [
   { pattern: /^\/register$/, tab: 'register', title: 'page.register', render: renderRegister },
+  { pattern: /^\/sessions$/, tab: 'sessions', title: 'page.sessions', render: renderSessionList },
+  {
+    pattern: /^\/sessions\/([^/]+)$/, tab: 'sessions', title: 'page.sessionDetail', back: '/sessions',
+    render: renderSessionDetail,
+  },
   { pattern: /^\/data$/, tab: 'data', title: 'page.data', render: renderData },
 ];
 

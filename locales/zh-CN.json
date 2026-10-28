@@ -90,5 +90,21 @@
   "register.confirm": "确认登记 {count} 个课次？",
   "register.confirmDuplicate": "以下课次已登记过：{list}。仍要登记全部 {count} 个课次吗？",
   "register.done": "已登记 {count} 个课次",
-  "register.submit": "登记"
+  "register.submit": "登记",
+  "page.sessions": "课次",
+  "page.sessionDetail": "课次详情",
+  "sessions.empty": "还没有登记任何课次。",
+  "sessions.goRegister": "去登记",
+  "sessions.summary": "共 {count} 个课次，合计费用 {total}",
+  "sessions.notFound": "找不到该课次，可能已被删除。",
+  "session.attendance": "出勤 {present}/{total}",
+  "session.leaveNames": "请假：{names}",
+  "session.perPerson": "人均",
+  "session.noAttendees": "无人出勤",
+  "session.tapToToggle": "点击名字切换出勤/请假",
+  "session.save": "保存修改",
+  "session.delete": "删除课次",
+  "session.confirmDelete": "确定删除 {date} 的{subject}课次？",
+  "session.deleted": "已删除",
+  "session.createdAt": "登记于 {time}"
 }
