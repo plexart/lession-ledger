@@ -1,5 +1,7 @@
 import { loadLocale, applyI18n, t } from './i18n.js';
 import { h } from './dom.js';
+import { store } from './store.js';
+import { renderData } from './views/data.js';
 
 const DEFAULT_LANG = 'zh-CN';
 
@@ -7,14 +9,16 @@ const DEFAULT_LANG = 'zh-CN';
  * Route table. `pattern` is matched against the hash path; capture groups are passed
  * to `render` as decoded params. `tab` highlights a tab, `back` shows a back button.
  */
-const routes = [];
+const routes = [
+  { pattern: /^\/data$/, tab: 'data', title: 'page.data', render: renderData },
+];
 
 const viewEl = document.getElementById('view');
 const titleEl = document.getElementById('page-title');
 const backEl = document.getElementById('back-button');
 
 function defaultPath() {
-  return '/register';
+  return store.hasRoster() ? '/register' : '/data';
 }
 
 export function navigate(path) {
@@ -48,7 +52,7 @@ function route() {
 
 async function main() {
   try {
-    await loadLocale(DEFAULT_LANG);
+    await loadLocale(store.data.settings.lang || DEFAULT_LANG);
   } catch (err) {
     console.error(err);
     viewEl.textContent = 'Failed to load locale.';
