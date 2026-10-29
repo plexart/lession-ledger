@@ -1,5 +1,6 @@
-// Service worker: precaches the app shell so the app opens offline, and serves
-// same-origin requests network-first so updates show up as soon as the user is online.
+// Service worker: precaches the app shell and serves it cache-first, so the app opens
+// instantly even on a slow network. Each launch refreshes the cache in the background;
+// a new deploy shows up on the next launch.
 
 const CACHE = 'lesson-ledger-v1';
 
@@ -44,22 +45,26 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-async function networkFirst(request) {
+async function cacheFirst(request) {
   const cache = await caches.open(CACHE);
-  try {
-    const response = await fetch(request);
-    if (response.ok) cache.put(request, response.clone());
-    return response;
-  } catch (err) {
-    const cached = await cache.match(request, { ignoreSearch: true });
-    if (cached) return cached;
-    if (request.mode === 'navigate') return cache.match('./');
-    throw err;
-  }
+  const cached = await cache.match(request, { ignoreSearch: true })
+    || (request.mode === 'navigate' && await cache.match('./'));
+  if (cached) return cached;
+  const response = await fetch(request);
+  if (response.ok) cache.put(request, response.clone());
+  return response;
+}
+
+// Re-downloads the whole app shell. addAll stores nothing unless every file arrives,
+// so the cache never mixes files from two deploys.
+async function refresh() {
+  const cache = await caches.open(CACHE);
+  await cache.addAll(ASSETS.map((url) => new Request(url, { cache: 'no-cache' }))).catch(() => {});
 }
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
-  event.respondWith(networkFirst(request));
+  event.respondWith(cacheFirst(request));
+  if (request.mode === 'navigate') event.waitUntil(refresh());
 });
