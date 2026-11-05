@@ -37,6 +37,9 @@ export function renderSessionList() {
           h('div', { class: 'sub' },
             [s.time, t('session.attendance', { present: s.attendees.length, total: s.attendees.length + s.absentees.length })]
               .filter(Boolean).join(' · ')),
+          s.attendees.length
+            ? h('div', { class: 'sub' }, rosterOrder(s.attendees).join(t('list.separator')))
+            : null,
           s.absentees.length
             ? h('div', { class: 'sub' }, t('session.leaveNames', { names: s.absentees.join(t('list.separator')) }))
             : null),
