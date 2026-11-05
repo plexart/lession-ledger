@@ -17,6 +17,7 @@ export function renderSessionList() {
     return h('div', { class: 'empty' }, t('sessions.empty'));
   }
 
+  const { showFees } = store.data.settings;
   const total = totalCents(sessions);
   const byDate = new Map();
   for (const s of sessions) {
@@ -25,7 +26,9 @@ export function renderSessionList() {
   }
 
   return h('div', null,
-    h('p', { class: 'muted small' }, t('sessions.summary', { count: sessions.length, total: money(total) })),
+    h('p', { class: 'muted small' }, showFees
+      ? t('sessions.summary', { count: sessions.length, total: money(total) })
+      : t('sessions.count', { count: sessions.length })),
     [...byDate].map(([date, list]) => [
       h('div', { class: 'section-title' }, dateLabel(date)),
       h('div', { class: 'list' }, list.map((s) => h('a', { class: 'list-item', href: `#/sessions/${encodeURIComponent(s.id)}` },
@@ -38,9 +41,11 @@ export function renderSessionList() {
             ? h('div', { class: 'sub' }, t('session.leaveNames', { names: s.absentees.join(t('list.separator')) }))
             : null),
         h('div', { class: 'side' },
-          s.attendees.length
+          !s.attendees.length
+            ? h('span', { class: 'badge' }, t('session.noAttendees'))
+            : showFees
             ? [h('div', { class: 'amount' }, money(shareCents(s))), h('div', { class: 'sub' }, t('session.perPerson'))]
-            : h('span', { class: 'badge' }, t('session.noAttendees')))))),
+            : null)))),
     ]));
 }
 

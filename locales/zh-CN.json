@@ -93,6 +93,7 @@
   "page.sessionDetail": "课次详情",
   "sessions.empty": "还没有登记任何课次，点击右上角的「登记」开始。",
   "sessions.summary": "共 {count} 个课次，合计费用 {total}",
+  "sessions.count": "共 {count} 个课次",
   "sessions.notFound": "找不到该课次，可能已被删除。",
   "session.attendance": "出勤 {present}/{total}",
   "session.leaveNames": "请假：{names}",
@@ -138,6 +139,6 @@
   "subject.total": "总费用 {total}",
   "student.present": "出勤",
   "data.showFees": "显示费用",
-  "data.showFeesHint": "关闭后，「科目」和「学生」页面不显示费用；「课次」页面和登记时仍会显示。",
+  "data.showFeesHint": "关闭后，「科目」「学生」页面和课次列表不显示费用；课次详情和登记时仍会显示。",
   "settings.version": "版本 {version}"
 }
