@@ -3,6 +3,25 @@ import { h, setChildren, toast } from '../dom.js';
 import { store, compareSessions } from '../store.js';
 import { shareCents, totalCents } from '../fees.js';
 import { money, dateLabel, rosterOrder } from '../format.js';
+import { monthRange, latestWeekRange } from '../dates.js';
+import { sessionsReport } from '../report.js';
+import { openShareDialog } from './share-dialog.js';
+
+function shareSessions(sessions) {
+  const today = new Date();
+  const dates = sessions.map((s) => s.date).sort();
+  openShareDialog({
+    presets: [
+      { key: 'latestWeek', label: t('share.preset.latestWeek'), range: latestWeekRange(sessions) },
+      { key: 'thisMonth', label: t('share.preset.thisMonth'), range: monthRange(today, 0) },
+      { key: 'lastMonth', label: t('share.preset.lastMonth'), range: monthRange(today, -1) },
+      { key: 'all', label: t('share.preset.all'), range: { from: dates[0], to: dates.at(-1) } },
+    ],
+    defaultPreset: 'latestWeek',
+    fileLabel: t('share.sessionsTitle'),
+    build: (range) => sessionsReport(sessions, { ...range, showFees: store.data.settings.showFees }),
+  });
+}
 
 export function renderSessionList() {
   const sessions = [...store.data.sessions].sort(compareSessions);
@@ -19,9 +38,11 @@ export function renderSessionList() {
   }
 
   return h('div', null,
-    h('p', { class: 'muted small' }, showFees
-      ? t('sessions.summary', { count: sessions.length, total: money(total) })
-      : t('sessions.count', { count: sessions.length })),
+    h('div', { class: 'summary-row' },
+      h('p', { class: 'muted small' }, showFees
+        ? t('sessions.summary', { count: sessions.length, total: money(total) })
+        : t('sessions.count', { count: sessions.length })),
+      h('button', { type: 'button', class: 'btn small', onClick: () => shareSessions(sessions) }, t('share.button'))),
     [...byDate].map(([date, list]) => [
       h('div', { class: 'section-title' }, dateLabel(date)),
       h('div', { class: 'list' }, list.map((s) => h('a', { class: 'list-item', href: `#/sessions/${encodeURIComponent(s.id)}` },

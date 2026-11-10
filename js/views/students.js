@@ -3,6 +3,9 @@ import { h } from '../dom.js';
 import { store, compareSessions } from '../store.js';
 import { shareCents, studentTotals } from '../fees.js';
 import { money, dateLabel, scheduleLabel, sortSubjects } from '../format.js';
+import { monthRange } from '../dates.js';
+import { studentReport } from '../report.js';
+import { openShareDialog } from './share-dialog.js';
 
 const studentHref = (name) => `#/students/${encodeURIComponent(name)}`;
 
@@ -41,6 +44,21 @@ function attendanceBadge(session, attended, showFees) {
     : h('span', { class: 'chip present' }, t('student.present'));
 }
 
+function shareStudent(name, history) {
+  const today = new Date();
+  const dates = history.map((s) => s.date).sort();
+  openShareDialog({
+    presets: [
+      { key: 'thisMonth', label: t('share.preset.thisMonth'), range: monthRange(today, 0) },
+      { key: 'lastMonth', label: t('share.preset.lastMonth'), range: monthRange(today, -1) },
+      { key: 'all', label: t('share.preset.all'), range: { from: dates[0] ?? '', to: dates.at(-1) ?? '' } },
+    ],
+    defaultPreset: 'thisMonth',
+    fileLabel: name,
+    build: (range) => studentReport(name, history, { ...range, showFees: store.data.settings.showFees }),
+  });
+}
+
 export function renderStudentDetail(ctx) {
   const [name] = ctx.params;
   const student = store.data.students.find((s) => s.name === name);
@@ -53,6 +71,7 @@ export function renderStudentDetail(ctx) {
   const total = studentTotals(history).get(name) ?? { cents: 0, attended: 0, leave: 0 };
   const subjects = sortSubjects(store.data.subjects.filter((s) => student?.subjects.includes(s.name)));
   const unknown = student ? student.subjects.filter((n) => !store.subject(n)) : [];
+  ctx.setAction('share.button', () => shareStudent(name, history));
 
   return h('div', null,
     h('section', { class: 'card' },

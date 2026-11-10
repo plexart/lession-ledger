@@ -52,3 +52,23 @@ export function defaultLessonDates(weekdays, today = new Date()) {
   for (const [w, offset] of offsets) result.set(w, addDays(anchor, offset));
   return result;
 }
+
+/** First and last day of the month `offset` months from `today` (0 = this month, -1 = last). */
+export function monthRange(today = new Date(), offset = 0) {
+  const first = new Date(today.getFullYear(), today.getMonth() + offset, 1);
+  const last = new Date(today.getFullYear(), today.getMonth() + offset + 1, 0);
+  return { from: toISODate(first), to: toISODate(last) };
+}
+
+/**
+ * Date span of the most recently registered lesson week: the registration batch of the latest
+ * session, or just that session's date when it has no batch. Null when there are no sessions.
+ */
+export function latestWeekRange(sessions) {
+  if (!sessions.length) return null;
+  const latest = sessions.reduce((a, b) => (b.date > a.date ? b : a));
+  const dates = latest.batchId
+    ? sessions.filter((s) => s.batchId === latest.batchId).map((s) => s.date).sort()
+    : [latest.date];
+  return { from: dates[0], to: dates.at(-1) };
+}
