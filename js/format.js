@@ -4,6 +4,7 @@ import { t, raw } from './i18n.js';
 import { makeWeekdayLookup, timeRangeMinutes } from './parse.js';
 import { formatAmount } from './fees.js';
 import { weekdayOfDate, lessonWeek } from './dates.js';
+import { store } from './store.js';
 
 export function weekdayName(weekday) {
   return raw('weekdays')[weekday];
@@ -44,4 +45,11 @@ export function sortSubjects(subjects) {
 /** "周五 18:30-20:00" */
 export function scheduleLabel(subject) {
   return `${weekdayName(subject.weekday)} ${subject.time}`;
+}
+
+/** Sorts names by roster order; names no longer on the roster go last. */
+export function rosterOrder(names) {
+  const index = new Map(store.data.students.map((s, i) => [s.name, i]));
+  const pos = (n) => index.get(n) ?? Infinity;
+  return [...names].sort((a, b) => pos(a) - pos(b));
 }

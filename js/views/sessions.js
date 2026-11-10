@@ -2,14 +2,7 @@ import { t } from '../i18n.js';
 import { h, setChildren, toast } from '../dom.js';
 import { store, compareSessions } from '../store.js';
 import { shareCents, totalCents } from '../fees.js';
-import { money, dateLabel } from '../format.js';
-
-/** Sorts names by roster order; names no longer on the roster go last. */
-function rosterOrder(names) {
-  const index = new Map(store.data.students.map((s, i) => [s.name, i]));
-  const pos = (n) => index.get(n) ?? Infinity;
-  return [...names].sort((a, b) => pos(a) - pos(b));
-}
+import { money, dateLabel, rosterOrder } from '../format.js';
 
 export function renderSessionList() {
   const sessions = [...store.data.sessions].sort(compareSessions);
