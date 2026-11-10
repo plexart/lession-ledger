@@ -37,6 +37,9 @@ let toastTimer = 0;
 
 export function toast(message) {
   const el = document.getElementById('toast');
+  // A modal <dialog> sits in the top layer above everything else; show the toast inside it.
+  const host = document.querySelector('dialog[open]') ?? document.body;
+  if (el.parentElement !== host) host.append(el);
   el.textContent = message;
   el.hidden = false;
   clearTimeout(toastTimer);
