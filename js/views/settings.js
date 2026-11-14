@@ -2,6 +2,7 @@ import { t, raw } from '../i18n.js';
 import { h, setChildren, toast } from '../dom.js';
 import { store, parseDataJSON, emptyData, DataError } from '../store.js';
 import { toISODate } from '../dates.js';
+import { shareFile } from '../share.js';
 import { APP_VERSION } from '../version.js';
 import {
   isStandalone, isIOS, canPromptInstall, promptInstall, onInstallChange,
@@ -108,19 +109,16 @@ function settingsCard() {
   );
 }
 
-function exportData() {
-  const blob = new Blob([JSON.stringify(store.data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = h('a', { href: url, download: `lesson-ledger-${toISODate(new Date())}.json` });
-  document.body.append(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+// Shared as plain text: WeChat and mobile Chrome's share sheet refuse .json files (canShare()
+// still says yes and only share() fails), so the backup always goes out as .txt.
+function shareBackup() {
+  const blob = new Blob([JSON.stringify(store.data, null, 2)], { type: 'text/plain' });
+  shareFile(blob, `lesson-ledger-${toISODate(new Date())}.txt`);
 }
 
 function backupCard(ctx) {
   const { data } = store;
-  const fileInput = h('input', { type: 'file', accept: 'application/json,.json', hidden: true });
+  const fileInput = h('input', { type: 'file', accept: 'application/json,.json,text/plain,.txt', hidden: true });
   fileInput.addEventListener('change', async () => {
     const file = fileInput.files[0];
     fileInput.value = '';
@@ -158,7 +156,7 @@ function backupCard(ctx) {
       sessions: data.sessions.length,
     })),
     h('div', { class: 'actions' },
-      h('button', { type: 'button', class: 'btn primary', onClick: exportData }, t('backup.export')),
+      h('button', { type: 'button', class: 'btn primary', onClick: shareBackup }, t('backup.share')),
       h('button', { type: 'button', class: 'btn', onClick: () => fileInput.click() }, t('backup.import'))),
     h('div', { class: 'actions' },
       h('button', { type: 'button', class: 'btn danger', onClick: clearAll }, t('backup.clear'))),
